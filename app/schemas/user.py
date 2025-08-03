@@ -1,25 +1,21 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, EmailStr
 
-class UserBase(BaseModel):
-	email: str
+
+class UserCreate(BaseModel):
+	email: EmailStr
 	password: str
 
-class UserCreate(UserBase):
-	pass
-
-class UserUpdate(UserBase):
-	email: str | None = None
-	is_active: bool | None = None
-	is_admin: bool | None = None
-
-class UserInDB(UserBase):
-
+class UserOut(BaseModel):
 	id: int
+	email: EmailStr
 	is_active: bool
-	is_admin: bool
-
-	tasks: list[int]
+class UserUpdate(BaseModel):
+	password: str|None
+	email: str|None
 
 	class Config:
 		from_attributes = True
+
+class Token(BaseModel):
+	access_token: str
+	token_type: str = "bearer"

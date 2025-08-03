@@ -1,21 +1,29 @@
+from app.core.security import hash_password
 from app.db.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
+from pydantic import EmailStr
 
 class UserRepository:
 	@staticmethod
-	async def create(db: AsyncSession, task_data: UserCreate):
-		user = User(**task_data)
+	async def create(db: AsyncSession, user_data: UserCreate):
+		print(user_data)
+		user = User(email=user_data.email, hashed_password=hash_password(user_data.password))
 		db.add(user)
-		db.commit()
-		db.refresh(user)
+		await db.commit()
+		await db.refresh(user)
 		return user
 
 
 	@staticmethod
 	async def get_by_id(db: AsyncSession, id: int):
 		result = await db.execute(select(User).where(User.id ==id))
+		return result.scalars().first()
+
+	@staticmethod
+	async def get_by_email(db: AsyncSession, email: EmailStr):
+		result = await db.execute(select(User).where(User.email==email))
 		return result.scalars().first()
 
 
