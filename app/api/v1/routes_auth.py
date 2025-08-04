@@ -14,12 +14,10 @@ router = APIRouter()
 @router.post('/register', response_model=UserOut)
 async def register(user_data: UserCreate, db: AsyncSession = Depends(get_session)):
 	user = await UserRepository.get_by_email(db, user_data.email)
-	print(123)
 	if user:
 		raise HTTPException(status_code=400, detail="Email is already used")
-	print(123)
+
 	new_user = await UserRepository.create(db, user_data)
-	print(123)
 	return new_user
 
 
@@ -29,5 +27,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
 	user = await UserRepository.get_by_email(db, form_data.username)
 	if not user or not verify_password(form_data.password, user.hashed_password):
 		raise HTTPException(status_code=400, detail="Wrong email or password")
+
 	token = create_access_token({"sub": str(user.id)})
 	return Token(access_token=token)
