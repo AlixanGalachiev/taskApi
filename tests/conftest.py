@@ -1,4 +1,5 @@
 import pytest_asyncio
+import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 from app.db.session import get_session
@@ -23,5 +24,18 @@ async def client(test_db):
 			yield session
 
 	app.dependency_overrides[get_session] = override_get_sesion
-	async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+	async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test/api/v1/") as ac:
 		yield ac
+
+# @pytest.fixture
+# def base_url():
+# 	return '/api/v1'
+
+@pytest_asyncio.fixture
+async def token(client):
+	login = await client.post("/auth/login", data={
+		"username": "test@example.com",
+		"password": "2345"
+	})
+
+	return login.json()['access_token']

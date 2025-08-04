@@ -59,4 +59,4 @@ async def delete(
 	db: AsyncSession = Depends(get_session),
 	current_user: User = Depends(get_current_user)
 ):
-	return True
+	return await TaskRepository.delete(db, id)
