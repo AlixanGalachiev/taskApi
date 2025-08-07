@@ -11,22 +11,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      tasks-api-backend:
-  
-  api:
-    build: .
-    depends_on:
-      - db
-    ports:
-      - "8000:8000"
-    networks:
-      tasks-api-backend:
-      tasks-api-frontend:
+
 
 volumes:
   postgres_data:
 
-networks:
-  tasks-api-backend:
-  tasks-api-frontend:
