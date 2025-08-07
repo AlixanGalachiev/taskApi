@@ -36,7 +36,7 @@ jobs:
         echo "DB_PASS=${{ secrets.DB_PASS }}" >> $GITHUB_ENV
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
         echo "JWT_AUTH_KEY=${{ secrets.JWT_AUTH_KEY }}" >> $GITHUB_ENV
-    -name: 
+    - name: Check envirinments
       run: |
         echo "ENV=$ENV"
         echo "DB_HOST=$DB_HOST"
