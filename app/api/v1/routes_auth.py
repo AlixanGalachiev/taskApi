@@ -21,8 +21,7 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_session
 	return new_user
 
 
-@router.post('/login')
-# @router.post('/login', response_model=Token)
+@router.post('/login', response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession=Depends(get_session)):
 	user = await UserRepository.get_by_email(db, form_data.username)
 	if not user or not verify_password(form_data.password, user.hashed_password):

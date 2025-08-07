@@ -27,9 +27,6 @@ async def client(test_db):
 	async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test/api/v1/") as ac:
 		yield ac
 
-# @pytest.fixture
-# def base_url():
-# 	return '/api/v1'
 
 @pytest_asyncio.fixture
 async def token(client):

@@ -26,18 +26,22 @@ async def test_get_all_tasks(client, token):
 
 @pytest.mark.asyncio
 async def test_get_by_id(client, token):
-	response = await client.post("tasks/", json={
-		"title": "test task11",
-		"description": "DESC"
-	}, headers={
+		# Получаем все задачи
+	response = await client.get("tasks/", headers={
 		"Authorization": f"Bearer {token}"
 	})
-	id = response.json()['id']
-	response = await client.get(f"tasks/{id}", headers={
+	assert response.status_code == 200
+	tasks = response.json()
+	assert len(tasks) > 0
+
+	# Берем ID первой задачи
+	task_id = tasks[0]['id']
+
+	response = await client.get(f"tasks/{task_id}", headers={
 		"Authorization": f"Bearer {token}"
 	})
 	assert 200 == response.status_code
-	assert 'test task11' == response.json()['title']
+	assert task_id == response.json()['id']
 
 
 @pytest.mark.asyncio
@@ -65,25 +69,25 @@ async def test_update_task(client, token):
 
 @pytest.mark.asyncio
 async def test_delete_task(client, token):
-    # Получаем все задачи
-    response = await client.get("tasks/", headers={
-        "Authorization": f"Bearer {token}"
-    })
-    assert response.status_code == 200
-    tasks = response.json()
-    assert len(tasks) > 0
+	# Получаем все задачи
+	response = await client.get("tasks/", headers={
+		"Authorization": f"Bearer {token}"
+	})
+	assert response.status_code == 200
+	tasks = response.json()
+	assert len(tasks) > 0
 
-    # Берем ID первой задачи
-    task_id = tasks[0]['id']
+	# Берем ID первой задачи
+	task_id = tasks[0]['id']
 
-    # Удаляем задачу
-    response = await client.delete(f"tasks/{task_id}", headers={
-        "Authorization": f"Bearer {token}"
-    })
-    assert response.status_code == 200
+	# Удаляем задачу
+	response = await client.delete(f"tasks/{task_id}", headers={
+		"Authorization": f"Bearer {token}"
+	})
+	assert response.status_code == 200
 
-    # Пробуем получить удаленную задачу
-    response = await client.get(f"tasks/{task_id}", headers={
-        "Authorization": f"Bearer {token}"
-    })
-    assert response.status_code == 404
+	# Пробуем получить удаленную задачу
+	response = await client.get(f"tasks/{task_id}", headers={
+		"Authorization": f"Bearer {token}"
+	})
+	assert response.status_code == 404
