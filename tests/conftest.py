@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 @pytest_asyncio.fixture
 async def test_db():
-	engine = create_async_engine(settings.DATABASE_URL_TEST, echo=True, future=True)
+	engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
 	async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 	yield async_session
  
