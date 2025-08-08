@@ -16,6 +16,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: tasks-test
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASS }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+        ports:
+          - ${{ secrets.DB_PORT }}:5432
+        options: >-
+          --health-cmd="pg_isready -U user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5м
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.12
@@ -42,15 +57,7 @@ jobs:
     #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
     #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Start test docker-compose
-      run: docker compose -f docker-compose.test.yml up -d
-    - name: Wait for Postgres
-      run: |
-        for i in {1..10}; do
-          nc -z localhost 5433 && echo "Postgres is up!" && break
-          echo "Waiting for Postgres..."
-          sleep 2
-        done
+
     - name: Test with pytest
       run: |
         pytest
