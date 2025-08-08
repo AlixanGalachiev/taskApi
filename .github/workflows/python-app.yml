@@ -15,7 +15,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: production
+    environment: tasks-test
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.12
