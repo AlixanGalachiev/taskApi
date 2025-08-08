@@ -3,7 +3,6 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-	ENV: str = "dev"
 
 	DB_HOST: str
 	DB_PORT: str
@@ -15,7 +14,7 @@ class Settings(BaseSettings):
 
 	class Config:
 		# Динамически выбираем .env-файл в зависимости от переменной ENV
-		env_file = f".env.{os.getenv('ENV', 'dev')}"
+		env_file = f"{os.getenv('ENV', '.env')}"
 		env_file_encoding = 'utf-8'
 
 
