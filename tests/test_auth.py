@@ -7,7 +7,7 @@ async def test_registration(client):
 		"password": "2345"
 	})
 
-	assert response == 1
+	assert response.status_code == 200
 	
 
 @pytest.mark.asyncio
