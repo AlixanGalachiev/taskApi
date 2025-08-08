@@ -36,15 +36,13 @@ jobs:
         echo "DB_PASS=${{ secrets.DB_PASS }}" >> $GITHUB_ENV
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
         echo "JWT_AUTH_KEY=${{ secrets.JWT_AUTH_KEY }}" >> $GITHUB_ENV
-    - name: Check envirinments
+    - name: Wait for Postgres
       run: |
-        echo "ENV=$ENV"
-        echo "DB_HOST=$DB_HOST"
-        echo "DB_PORT=$DB_PORT"
-        echo "DB_USER=$DB_USER"
-        echo "DB_PASS=$DB_PASS"
-        echo "DB_NAME=$DB_NAME"
-        echo "JWT_AUTH_KEY=$JWT_AUTH_KEY"
+        for i in {1..10}; do
+          nc -z localhost 5433 && echo "Postgres is up!" && break
+          echo "Waiting for Postgres..."
+          sleep 2
+        done
     # - name: Lint with flake8
     #   run: |
     #     # stop the build if there are Python syntax errors or undefined names
