@@ -1,13 +1,13 @@
 import pytest
 
-# @pytest.mark.asyncio
-# async def test_registration(client):
-# 	response = await client.post(f"{base_url}/auth/register", json={
-# 		"email": "test@example.com",
-# 		"password": "2345"
-# 	})
+@pytest.mark.asyncio
+async def test_registration(client):
+	response = await client.post(f"{base_url}/auth/register", json={
+		"email": "test@example.com",
+		"password": "2345"
+	})
 
-# 	assert response == 1
+	assert response == 1
 	
 
 @pytest.mark.asyncio
