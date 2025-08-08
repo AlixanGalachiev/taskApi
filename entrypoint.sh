@@ -17,4 +17,4 @@ echo "✅ База данных доступна!"
 alembic upgrade head
 
 # Запускаем приложение
-exec gunicorn app.main:app -k uvicorn.workers.UvicornWorker --workers 4 --bind localhost:8000
+exec gunicorn app.main:app -k uvicorn.workers.UvicornWorker --workers 4 --bind 0.0.0.0:8000
