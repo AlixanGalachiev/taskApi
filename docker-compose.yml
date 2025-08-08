@@ -3,6 +3,8 @@ version: "3.9"
 services:
   db:
     image: postgres:15
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
@@ -22,7 +24,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   api:
     build: .
     depends_on:
@@ -30,7 +32,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     networks:
       tasks-api-backend:
       tasks-api-frontend:
